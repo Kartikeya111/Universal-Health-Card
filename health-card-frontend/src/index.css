@@ -1,0 +1,14 @@
+:root {
+  color-scheme: light dark;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  height: 95vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center
+}
