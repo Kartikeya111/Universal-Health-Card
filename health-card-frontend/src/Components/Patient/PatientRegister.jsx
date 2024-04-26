@@ -1,5 +1,6 @@
-import { Box, Button, TextField } from '@mui/material'
+import { Box, Button, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router'
 
 const PatientRegister = () => {
   const [firstName, setFirstName] = useState("")
@@ -8,6 +9,8 @@ const PatientRegister = () => {
   const [contactNo, setContactNo] = useState()
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
+
+  let navigate = useNavigate()
 
   const handleRegister = (e) => {
     e.preventDefault()
@@ -19,6 +22,12 @@ const PatientRegister = () => {
     setPassword("")
     setConfirmPassword("")
     setSpeciality("")
+    navigate('/patient/login')
+  }
+
+  const handleClickLogin = (e) => {
+    e.preventDefault()
+    navigate('/patient/login')
   }
 
   return (
@@ -118,7 +127,8 @@ const PatientRegister = () => {
           sx={{ color: 'grey', my: '2px' }}>
           Already have an account?
           <Button
-            variant='text'> Login Here</Button>
+            variant='text'
+            onClick={handleClickLogin}> Login Here</Button>
         </Typography>
       </form>
     </Box>

@@ -1,8 +1,8 @@
-import { Avatar, Badge, Box, Button, Fab, Typography } from '@mui/material'
+import { Avatar, Box, Fab, Typography } from '@mui/material'
 import EditIcon from '@mui/icons-material/Edit'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
-import TopNavbar from '../TopNavbar'
+import TopNavbar from '../Patient/TopNavbar'
 
 const Profile = () => {
     let navigate = useNavigate()

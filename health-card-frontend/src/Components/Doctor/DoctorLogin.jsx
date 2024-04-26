@@ -1,15 +1,27 @@
 import { Box, Button, TextField, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
+import UserContext from '../UserContext'
+import { useNavigate } from 'react-router'
 
 const DoctorLogin = () => {
   const [registrationID, setRegistrationID] = useState()
   const [password, setPassword] = useState("")
 
+  const { login } = useContext(UserContext)
+  let navigate = useNavigate()
+
   const handleLogin = (e) => {
     e.preventDefault()
     {/* API Call to Login */ }
+    login(registrationID, 'doctor')
     setRegistrationID()
     setPassword("")
+    navigate('/doctor/home')
+  }
+
+  const handleClickRegister = (e) => {
+    e.preventDefault()
+    navigate('/doctor/register')
   }
 
   return (
@@ -61,7 +73,10 @@ const DoctorLogin = () => {
           sx={{ color: 'grey', my: '2px' }}>
           Don't have an account?
           <Button
-            variant='text'> Register Here</Button>
+            variant='text'
+            onClick={handleClickRegister}>
+            Register Here
+          </Button>
         </Typography>
       </form>
     </Box>
