@@ -130,7 +130,7 @@ def afterlogin_view(request):
 #  ADDED FUNCTIONS #
 #Doctor View Patient Profile
 def doc_view_profile(request):
-    df= pd.read_excel("F:\Visual_Studio\MajorProject\hospitalmanagement-master\csv Files\Patient Data.xlsx")
+    df= pd.read_excel("csv Files/Patient Data.xlsx")
     user_id="abc123"
     df2 = df[(df["Username"]==user_id) & (df["hide"]==0)]
     df2 = df2.sort_values(by="date",ascending=False)
@@ -162,7 +162,7 @@ def doc_view_profile(request):
 
 # For Showing patient's Profile page
 def profile_page(request):
-    df= pd.read_excel("F:\Visual_Studio\MajorProject\hospitalmanagement-master\csv Files\Patient Data.xlsx")
+    df= pd.read_excel("csv Files/Patient Data.xlsx")
     user_id="abc123"
     df2 = df[df["Username"]==user_id]
     df2 = df2.sort_values(by="date",ascending=False)
@@ -902,8 +902,3 @@ def contactus_view(request):
 #------------------------ ADMIN RELATED VIEWS END ------------------------------
 #---------------------------------------------------------------------------------
 
-
-
-#Developed By : sumit kumar
-#facebook : fb.com/sumit.luv
-#Youtube :youtube.com/lazycoders
