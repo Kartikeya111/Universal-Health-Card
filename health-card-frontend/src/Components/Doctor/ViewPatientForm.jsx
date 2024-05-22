@@ -1,11 +1,17 @@
 import { Button } from '@mui/material'
 import { Box, TextField } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
+import UserContext from '../UserContext'
+import PleaseSignIn from '../PleaseSignIn'
+
+// TODO: @Shreya-Jathar: Add Doctor NavBAr
+// TODO: @Shreya-Jathar: Use Same Conditional Rendering on all other Pages
 
 const ViewPatient = () => {
     const [patientNo, setPatientNo] = useState("")
     const [OTP, setOTP] = useState("")
     const isOTPButtonEnabled = patientNo.length === 10
+    const {cookies} = useContext(UserContext)
 
     const onSubmit = (e) => {
         e.preventDefault()
@@ -27,13 +33,14 @@ const ViewPatient = () => {
             flexDirection={'column'}
             justifyContent={'space-evenly'}>
 
-            <form
+            { (cookies.userID && (cookies.userRole === 'doctor')) ?
+                <form
                 onSubmit={onSubmit} >
                 <Box
                     display={'flex'}
                     flexDirection={'column'}
                     justifyContent={'space-evenly'}
-                    sx={{ p: 3, border: '2px solid grey', width: '50vw', height: '20vh', m: 'auto' }}>
+                    sx={{ p: 3, border: '2px solid grey', width: '50vw', height: '30vh', m: 'auto' }}>
 
                     <TextField
                         required
@@ -64,7 +71,8 @@ const ViewPatient = () => {
                     </Button>
 
                 </Box>
-            </form>
+            </form> : <PleaseSignIn />
+            }
         </Box>
     )
 }

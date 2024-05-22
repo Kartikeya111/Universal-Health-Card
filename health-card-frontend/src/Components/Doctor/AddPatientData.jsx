@@ -4,6 +4,8 @@ import React, { useState } from 'react'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
+// TODO: @Shreya-Jathar: Add NavBar
+
 const AddPatientData = () => {
     const [apptDate, setApptDate] = useState(null)
     const [description, setDescription] = useState("")

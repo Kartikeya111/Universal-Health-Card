@@ -2,6 +2,9 @@ import { Box, Button, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router'
 
+// TODO: @Shreya-Jathar: Re-Implement
+// TODO: @Shreya-Jathar: Add Common NavBar
+
 const PatientRegister = () => {
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")

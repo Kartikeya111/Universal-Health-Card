@@ -3,6 +3,8 @@ import React, { useContext, useState } from 'react'
 import UserContext from '../UserContext'
 import { useNavigate } from 'react-router'
 
+// TODO: @Shreya-Jathar: Add Common NavBar
+
 const PatientLogin = () => {
   const [adharNumber, setAdharNumber] = useState()
   const [password, setPassword] = useState("")

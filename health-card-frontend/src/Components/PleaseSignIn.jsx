@@ -2,7 +2,7 @@ import React from 'react'
 
 // TODO: @Shreya-Jathar
 
-const EditProfile = () => {
+const PleaseSignIn = () => {
   return (
     <div>
       
@@ -10,4 +10,4 @@ const EditProfile = () => {
   )
 }
 
-export default EditProfile
+export default PleaseSignIn

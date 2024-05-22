@@ -6,6 +6,10 @@ import doctorImage from '../assets/images/doctor.png'
 import patientImage from '../assets/images/patient.jpg'
 import { useNavigate } from 'react-router'
 
+// TODO: @Kartikeya111: Add a Heading or Something on the Image Called KnowMore
+// It can be the name of the app or a logo.
+// We will not actually add a know more page
+
 const ImageButton = styled(Button)(() => ({
 
   width: '25%',

@@ -1,14 +1,17 @@
-import { Avatar, Box, Button, IconButton, Menu, MenuItem, Tooltip } from '@mui/material'
-import React, { useState } from 'react'
+import { AppBar, Avatar, Box, Button, IconButton, Menu, MenuItem, Tooltip } from '@mui/material'
+import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router'
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Logout from '@mui/icons-material/Logout';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import HomeIcon from '@mui/icons-material/Home';
+import UserContext from '../UserContext'
 
 const TopNavbar = () => {
     let navigate = useNavigate()
     const [menuAnchor, setMenuAnchor] = useState(null)
     const open = Boolean(menuAnchor)
+    const {logout} = useContext(UserContext)
 
     const handleAvatarClick = (e) => {
         setMenuAnchor(e.currentTarget)
@@ -19,27 +22,29 @@ const TopNavbar = () => {
     }
 
     const handleClickHome = () => {
-        {/* If account is patient then go to patient home
-            Else, go to doctor home */}
+        console.log("Home")
         navigate('/patient/home')
     }
 
     const handleClickProfile = () => {
+        console.log("Profile")
         navigate('/patient/profile')
     }
 
     const handleLogout = () => {
         console.log('Logout')
+        logout()
+        navigate('/')
     }
 
     return (
-        <>
+        <AppBar>
             <Box
                 width={1}
                 display={'flex'}
                 flexDirection={'row'}
                 sx={{
-                    borderBottom: '0.5px solid black'
+                    borderBottom: '0.5px solid black', py: 0.5
                 }}>
 
                 {/* Kartikeya please make this pretty i give upppp */}
@@ -47,7 +52,8 @@ const TopNavbar = () => {
                     type='text'
                     sx={{
                         color: 'black',
-                        fontSize: '12px'
+                        fontSize: '12px',
+                        m: 1
                     }}
                     onClick={handleClickHome}>
                     Universal Health Card
@@ -55,7 +61,7 @@ const TopNavbar = () => {
 
                 <Tooltip
                     title='Account Settings'
-                    sx={{ ml: 'auto', mr: '2px' }}>
+                    sx={{ ml: 'auto', mr: 1 }}>
                     <IconButton
                         size='small'
                         onClick={handleAvatarClick}
@@ -77,6 +83,13 @@ const TopNavbar = () => {
                     </ListItemIcon>
                     Profile
                 </MenuItem>
+                <MenuItem
+                    onClick={handleClickHome}>
+                    <ListItemIcon>
+                        <HomeIcon fontSize='small' />
+                    </ListItemIcon>
+                    Home
+                </MenuItem>
                 <MenuItem onClick={handleLogout}>
                     <ListItemIcon>
                         <Logout
@@ -85,7 +98,7 @@ const TopNavbar = () => {
                     Logout
                 </MenuItem>
             </Menu>
-        </>
+        </AppBar>
     )
 }
 

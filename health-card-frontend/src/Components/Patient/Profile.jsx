@@ -2,7 +2,7 @@ import { Avatar, Box, Fab, Typography } from '@mui/material'
 import EditIcon from '@mui/icons-material/Edit'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
-import TopNavbar from '../Patient/TopNavbar'
+import PatientNavbar from './PatientNavbar'
 
 const Profile = () => {
     let navigate = useNavigate()
@@ -25,7 +25,7 @@ const Profile = () => {
             display={'flex'}
             flexDirection={'column'}>
 
-            <TopNavbar />
+            <PatientNavbar />
 
             <Box
                 width={0.5}

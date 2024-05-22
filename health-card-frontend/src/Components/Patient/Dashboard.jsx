@@ -3,6 +3,8 @@ import React from 'react'
 import Records from './Records'
 import { useNavigate } from 'react-router'
 
+// TODO: @Shreya-Jathar: Add Patient NavBar
+
 const Dashboard = () => {
   let navigate = useNavigate() 
 
