@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required,user_passes_test
 from datetime import datetime,timedelta,date
 from django.conf import settings
 from django.db.models import Q
+import pandas as pd
 
 # Create your views here.
 def home_view(request):
@@ -35,8 +36,6 @@ def patientclick_view(request):
     if request.user.is_authenticated:
         return HttpResponseRedirect('afterlogin')
     return render(request,'hospital/patientclick.html')
-
-
 
 
 def admin_signup_view(request):
@@ -126,10 +125,72 @@ def afterlogin_view(request):
         else:
             return render(request,'hospital/patient_wait_for_approval.html')
 
+#####
+#####
+#  ADDED FUNCTIONS #
+#Doctor View Patient Profile
+def doc_view_profile(request):
+    df= pd.read_excel("csv Files/Patient Data.xlsx")
+    user_id="abc123"
+    df2 = df[(df["Username"]==user_id) & (df["hide"]==0)]
+    df2 = df2.sort_values(by="date",ascending=False)
+    con = {"data":[]}
+    for row in df2.iloc[:,:].values:
+        context = {}
+        context["patient_name"]=row[1]
+        context["doctor_name"]=row[2]
+        context["doctor_id"]=row[3]
+        context["title"]=row[4]
+        context["category"]=row[5]
+        if(row[6].lower()=="yes"):
+            context["isdoctor"]="Doctor"
+        else:
+            context["isdoctor"]="Hospital"
+        context["link"]=[]
+        for link in row[7].split(','):
+            temp={}
+            temp["sublink"]=link
+            temp["file_name"]=link.split("\\")[-1]
+            context["link"].append(temp)
+        full_date=str(row[8])
+        full_date=full_date.split(" ")
+        context["date"]=full_date[0]
+        context["time"]=full_date[1]
+        con["data"].append(context)
+    con
+    return render(request,"hospital/profile.html",con)
 
-
-
-
+# For Showing patient's Profile page
+def profile_page(request):
+    df= pd.read_excel("csv Files/Patient Data.xlsx")
+    user_id="abc123"
+    df2 = df[df["Username"]==user_id]
+    df2 = df2.sort_values(by="date",ascending=False)
+    con = {"data":[]}
+    for row in df2.iloc[:,:].values:
+        context = {}
+        context["patient_name"]=row[1]
+        context["doctor_name"]=row[2]
+        context["doctor_id"]=row[3]
+        context["title"]=row[4]
+        context["category"]=row[5]
+        if(row[6].lower()=="yes"):
+            context["isdoctor"]="Doctor"
+        else:
+            context["isdoctor"]="Hospital"
+        context["link"]=[]
+        for link in row[7].split(','):
+            temp={}
+            temp["sublink"]=link
+            temp["file_name"]=link.split("\\")[-1]
+            context["link"].append(temp)
+        full_date=str(row[8])
+        full_date=full_date.split(" ")
+        context["date"]=full_date[0]
+        context["time"]=full_date[1]
+        con["data"].append(context)
+    con
+    return render(request,"hospital/profile.html",con)
 
 
 
@@ -841,8 +902,3 @@ def contactus_view(request):
 #------------------------ ADMIN RELATED VIEWS END ------------------------------
 #---------------------------------------------------------------------------------
 
-
-
-#Developed By : sumit kumar
-#facebook : fb.com/sumit.luv
-#Youtube :youtube.com/lazycoders
