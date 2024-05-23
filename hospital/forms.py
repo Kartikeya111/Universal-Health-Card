@@ -18,14 +18,15 @@ class AdminSigupForm(forms.ModelForm):
 class DoctorUserForm(forms.ModelForm):
     class Meta:
         model=User
-        fields=['first_name','last_name','username','password']
+        fields=['first_name','last_name','username','password','confirmpassword']
         widgets = {
         'password': forms.PasswordInput()
         }
+
 class DoctorForm(forms.ModelForm):
     class Meta:
         model=models.Doctor
-        fields=['address','mobile','department','status','profile_pic']
+        fields=['doctorID','mobile','department']
 
 
 
@@ -33,7 +34,7 @@ class DoctorForm(forms.ModelForm):
 class PatientUserForm(forms.ModelForm):
     class Meta:
         model=User
-        fields=['first_name','last_name','username','password']
+        fields=['first_name','last_name','dob','gender','contact','aadhar']
         widgets = {
         'password': forms.PasswordInput()
         }

@@ -1,13 +1,23 @@
 from django.shortcuts import render,redirect,reverse
 from . import forms,models
-from django.db.models import Sum
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required,user_passes_test
 from datetime import datetime,timedelta,date
 from django.conf import settings
 from django.db.models import Q
+#------
+from rest_framework import generics
+from rest_framework import status
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from django.contrib.auth import authenticate
+from .serializers import DoctorSignUpSerializer, DoctorLoginSerializer,PatientSerializer, RecordsSerializer
+from .models import Doctor,Patient,Records
+from rest_framework.permissions import IsAuthenticated, AllowAny
+
+
 import pandas as pd
 
 # Create your views here.
@@ -37,7 +47,7 @@ def patientclick_view(request):
         return HttpResponseRedirect('afterlogin')
     return render(request,'hospital/patientclick.html')
 
-
+'''
 def admin_signup_view(request):
     form=forms.AdminSigupForm()
     if request.method=='POST':
@@ -50,56 +60,36 @@ def admin_signup_view(request):
             my_admin_group[0].user_set.add(user)
             return HttpResponseRedirect('adminlogin')
     return render(request,'hospital/adminsignup.html',{'form':form})
+'''
+
+
+class doctor_signup_view(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = DoctorSignUpSerializer
+    permission_classes = [AllowAny]
+
+class patient_signup_view(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = PatientSerializer
+    permission_classes = [AllowAny]
+
+class add_record(generics.ListCreateAPIView):
+    serializer_class = RecordsSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Records.objects.filter(user=user)
+
+    def perform_create(self, serializer):
+        if serializer.is_valid():
+            serializer.save(doctorID=self.request.user)
+        else:
+            print(serializer.errors)
 
 
 
-
-def doctor_signup_view(request):
-    userForm=forms.DoctorUserForm()
-    doctorForm=forms.DoctorForm()
-    mydict={'userForm':userForm,'doctorForm':doctorForm}
-    if request.method=='POST':
-        userForm=forms.DoctorUserForm(request.POST)
-        doctorForm=forms.DoctorForm(request.POST,request.FILES)
-        if userForm.is_valid() and doctorForm.is_valid():
-            user=userForm.save()
-            user.set_password(user.password)
-            user.save()
-            doctor=doctorForm.save(commit=False)
-            doctor.user=user
-            doctor=doctor.save()
-            my_doctor_group = Group.objects.get_or_create(name='DOCTOR')
-            my_doctor_group[0].user_set.add(user)
-        return HttpResponseRedirect('doctorlogin')
-    return render(request,'hospital/doctorsignup.html',context=mydict)
-
-
-def patient_signup_view(request):
-    userForm=forms.PatientUserForm()
-    patientForm=forms.PatientForm()
-    mydict={'userForm':userForm,'patientForm':patientForm}
-    if request.method=='POST':
-        userForm=forms.PatientUserForm(request.POST)
-        patientForm=forms.PatientForm(request.POST,request.FILES)
-        if userForm.is_valid() and patientForm.is_valid():
-            user=userForm.save()
-            user.set_password(user.password)
-            user.save()
-            patient=patientForm.save(commit=False)
-            patient.user=user
-            patient.assignedDoctorId=request.POST.get('assignedDoctorId')
-            patient=patient.save()
-            my_patient_group = Group.objects.get_or_create(name='PATIENT')
-            my_patient_group[0].user_set.add(user)
-        return HttpResponseRedirect('patientlogin')
-    return render(request,'hospital/patientsignup.html',context=mydict)
-
-
-
-
-
-
-#-----------for checking user is doctor , patient or admin(by sumit)
+#-----------for checking user is doctor , patient or
 def is_admin(user):
     return user.groups.filter(name='ADMIN').exists()
 def is_doctor(user):
@@ -109,6 +99,7 @@ def is_patient(user):
 
 
 #---------AFTER ENTERING CREDENTIALS WE CHECK WHETHER USERNAME AND PASSWORD IS OF ADMIN,DOCTOR OR PATIENT
+'''
 def afterlogin_view(request):
     if is_admin(request.user):
         return redirect('admin-dashboard')
@@ -124,7 +115,7 @@ def afterlogin_view(request):
             return redirect('patient-dashboard')
         else:
             return render(request,'hospital/patient_wait_for_approval.html')
-
+'''
 #####
 #####
 #  ADDED FUNCTIONS #
@@ -197,6 +188,7 @@ def profile_page(request):
 #---------------------------------------------------------------------------------
 #------------------------ ADMIN RELATED VIEWS START ------------------------------
 #---------------------------------------------------------------------------------
+'''
 @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def admin_dashboard_view(request):
@@ -615,7 +607,7 @@ def reject_appointment_view(request,pk):
 #---------------------------------------------------------------------------------
 #------------------------ ADMIN RELATED VIEWS END ------------------------------
 #---------------------------------------------------------------------------------
-
+'''
 
 
 
@@ -624,6 +616,7 @@ def reject_appointment_view(request,pk):
 #---------------------------------------------------------------------------------
 #------------------------ DOCTOR RELATED VIEWS START ------------------------------
 #---------------------------------------------------------------------------------
+'''
 @login_required(login_url='doctorlogin')
 @user_passes_test(is_doctor)
 def doctor_dashboard_view(request):
@@ -740,7 +733,7 @@ def delete_appointment_view(request,pk):
     appointments=zip(appointments,patients)
     return render(request,'hospital/doctor_delete_appointment.html',{'appointments':appointments,'doctor':doctor})
 
-
+'''
 
 #---------------------------------------------------------------------------------
 #------------------------ DOCTOR RELATED VIEWS END ------------------------------
@@ -754,6 +747,7 @@ def delete_appointment_view(request,pk):
 #---------------------------------------------------------------------------------
 #------------------------ PATIENT RELATED VIEWS START ------------------------------
 #---------------------------------------------------------------------------------
+'''
 @login_required(login_url='patientlogin')
 @user_passes_test(is_patient)
 def patient_dashboard_view(request):
@@ -871,7 +865,7 @@ def patient_discharge_view(request):
 
 #------------------------ PATIENT RELATED VIEWS END ------------------------------
 #---------------------------------------------------------------------------------
-
+'''
 
 
 
@@ -886,6 +880,9 @@ def aboutus_view(request):
     return render(request,'hospital/aboutus.html')
 
 def contactus_view(request):
+    return render(request, 'hospital/contactus.html')
+'''
+def contactus_view(request):
     sub = forms.ContactusForm()
     if request.method == 'POST':
         sub = forms.ContactusForm(request.POST)
@@ -896,7 +893,7 @@ def contactus_view(request):
             send_mail(str(name)+' || '+str(email),message,settings.EMAIL_HOST_USER, settings.EMAIL_RECEIVING_USER, fail_silently = False)
             return render(request, 'hospital/contactussuccess.html')
     return render(request, 'hospital/contactus.html', {'form':sub})
-
+'''
 
 #---------------------------------------------------------------------------------
 #------------------------ ADMIN RELATED VIEWS END ------------------------------

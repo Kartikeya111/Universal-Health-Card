@@ -10,11 +10,16 @@ departments=[('Cardiologist','Cardiologist'),
 ]
 class Doctor(models.Model):
     user=models.OneToOneField(User,on_delete=models.CASCADE)
-    profile_pic= models.ImageField(upload_to='profile_pic/DoctorProfilePic/',null=True,blank=True)
-    address = models.CharField(max_length=40)
-    mobile = models.CharField(max_length=20,null=True)
-    department= models.CharField(max_length=50,choices=departments,default='Cardiologist')
-    status=models.BooleanField(default=False)
+    first_name = models.CharField(max_length=20,null=False)
+    last_name = models.CharField(max_length=20,null=False)
+    doctorID = models.CharField(max_length=10, unique=True)
+    username = models.CharField(max_length=50, unique=True)
+    password = models.CharField(max_length=128)
+    confirmpassword = models.CharField(max_length=128)
+    mobile = models.CharField(max_length=20,null=False)
+    department= models.CharField(max_length=50,choices=departments)
+    #profile_pic= models.ImageField(upload_to='profile_pic/DoctorProfilePic/',null=True,blank=True)
+
     @property
     def get_name(self):
         return self.user.first_name+" "+self.user.last_name
@@ -25,18 +30,15 @@ class Doctor(models.Model):
         return "{} ({})".format(self.user.first_name,self.department)
 
 
-
+gender = [('Male','Male'),('Female','Female'),('other','other')]
 class Patient(models.Model):
     user=models.OneToOneField(User,on_delete=models.CASCADE)
-    profile_pic= models.ImageField(upload_to='profile_pic/PatientProfilePic/',null=True,blank=True)
-    address = models.CharField(max_length=40)
+    first_name = models.CharField(max_length=20,null=False)
+    last_name = models.CharField(max_length=20,null=False)
+    dob = models.DateField(null=False)
+    gender = models.CharField(max_length=10,choices=gender,null=False)
     mobile = models.CharField(max_length=20,null=False)
-    aadhar = models.CharField(max_length=12, null=True)
-    age = models.IntegerField(null=True, blank=True)
-    symptoms = models.CharField(max_length=100,null=False)
-    assignedDoctorId = models.PositiveIntegerField(null=True)
-    admitDate=models.DateField(auto_now=True)
-    status=models.BooleanField(default=False)
+    aadhar = models.CharField(max_length=12, null=False)
     @property
     def get_name(self):
         return self.user.first_name+" "+self.user.last_name
@@ -44,7 +46,23 @@ class Patient(models.Model):
     def get_id(self):
         return self.user.id
     def __str__(self):
-        return self.user.first_name+" ("+self.symptoms+")"
+        return self.first_name+" "+self.last_name
+
+
+class Records(models.Model):
+    aadhar = models.CharField(max_length=12, null=False)
+    patient_name = models.CharField(max_length=40,null=False)
+    doctor_name = models.CharField(max_length=40,null=False)
+    doctorID = models.CharField(max_length=10)
+    title = models.CharField(max_length=100,null=False)
+    category = models.CharField(max_length=20,null=False)
+    isdoctor = models.BooleanField(default=True)
+    link = models.CharField(max_length=200,null=False)
+    dateupload = models.DateField(auto_now=True)
+    hide = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.user.title
 
 
 class Appointment(models.Model):
