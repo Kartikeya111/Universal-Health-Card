@@ -56,13 +56,9 @@
   <br>
   <br>
   <br>
-  <br>
 
-
-
-
-  <!--- signup page for admin by admin(sumit)  ---------->
-  <form method="post">
+  <!--- signup page for admin  ---------->
+  <form action="adminsignup" method="post">
     {% csrf_token %}
     <div class="container register-form">
       <div class="form">
@@ -98,11 +94,6 @@
     </div>
 
   </form>
-  <!--
-  developed By : sumit kumar
-  facebook : fb.com/sumit.luv
-  youtube : youtube.com/lazycoders
-  -->
 
   {% include "hospital/footer.html" %}
 </body>
