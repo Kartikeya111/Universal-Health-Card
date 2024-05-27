@@ -1,35 +1,36 @@
 from django import forms
 from django.contrib.auth.models import User
 from . import models
-
-
-
-#for admin signup
-class AdminSigupForm(forms.ModelForm):
-    class Meta:
-        model=User
-        fields=['first_name','last_name','username','password']
-        widgets = {
-        'password': forms.PasswordInput()
-        }
+from django.contrib.auth.forms import UserCreationForm
 
 
 #for student related form
-class DoctorUserForm(forms.ModelForm):
+class DoctorSignupForm(UserCreationForm):
+    first_name = forms.CharField(max_length=30)
+    last_name = forms.CharField(max_length=30)
+    doctorID = forms.CharField(max_length=100)
+    username = forms.CharField(max_length=150)
+    password = forms.CharField(widget=forms.PasswordInput)
+    confirmpassword = forms.CharField(widget=forms.PasswordInput)
+    mobile = forms.CharField(max_length=15)
+    department = forms.CharField(max_length=100)
     class Meta:
         model=User
-        fields=['first_name','last_name','username','password']
-        widgets = {
-        'password': forms.PasswordInput()
-        }
-class DoctorForm(forms.ModelForm):
-    class Meta:
-        model=models.Doctor
-        fields=['address','mobile','department','status','profile_pic']
+        fields=['first_name','last_name','username','password','confirmpassword']
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get("password")
+        confirmpassword = cleaned_data.get("confirmpassword")
+
+        if password != confirmpassword:
+            raise forms.ValidationError("Password and Confirm Password does not match")
+        return cleaned_data
 
 
 
 #for teacher related form
+'''
 class PatientUserForm(forms.ModelForm):
     class Meta:
         model=User
@@ -61,7 +62,7 @@ class PatientAppointmentForm(forms.ModelForm):
     class Meta:
         model=models.Appointment
         fields=['description','status']
-
+'''
 
 #for contact us page
 class ContactusForm(forms.Form):
@@ -70,7 +71,3 @@ class ContactusForm(forms.Form):
     Message = forms.CharField(max_length=500,widget=forms.Textarea(attrs={'rows': 3, 'cols': 30}))
 
 
-
-#Developed By : sumit kumar
-#facebook : fb.com/sumit.luv
-#Youtube :youtube.com/lazycoders
