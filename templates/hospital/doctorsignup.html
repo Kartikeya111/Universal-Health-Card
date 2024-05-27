@@ -17,6 +17,11 @@
     a:link {
       text-decoration: none;
     }
+    input{
+      border-radius:5px;
+      padding:5px;
+      width:400px;
+    }
 
     .note {
       text-align: center;
@@ -59,9 +64,6 @@
   <br>
 
 
-
-
-  <!--- signup page for doctor by admin(sumit)  ---------->
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="container register-form">
@@ -74,16 +76,20 @@
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
-                {% render_field userForm.first_name class="form-control" placeholder="First Name" %}
+                <input type="text" placeholder="First Name" name="first_name" required>
+                
               </div>
               <div class="form-group">
-                {% render_field userForm.last_name class="form-control" placeholder="Doctor Registration ID" %}
+                <input type="text" placeholder="Enter Unique Doctor ID" name="doctorID" required>
+                
               </div>
               <div class="form-group">
-                {% render_field userForm.password class="form-control" placeholder="Password" %}
+                <input type="password" placeholder="Password" name="password" required>
+               
               </div>
               <div class="form-group">
-                {% render_field doctorForm.mobile class="form-control"  placeholder="Mobile" %}
+                <input type="text" placeholder="Contact Number" name="mobile" required>
+            
               </div>
               
               
@@ -92,23 +98,27 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                {% render_field userForm.last_name class="form-control" placeholder="Last Name" %}
+                <input type="text" placeholder="Last Name" name="last_name" required>
+           
               </div>
               <div class="form-group">
-                {% render_field userForm.username class="form-control" placeholder="Username" %}
+                <input type="text" placeholder="Username" name="username" required>
+               
               </div>
               <div class="form-group">
-                {% render_field userForm.password class="form-control" placeholder="Confirm Password" %}
+                <input type="password" placeholder="Confirm Password" name="confirmpassword" required>
+               
               </div>
               <div class="form-group">
-                {% render_field doctorForm.department class="form-control" placeholder="Department" %}
+                <input type="text" placeholder="Department" name="department" required>
+                
               </div>
               
 
             </div>
           </div><br>
           <center>
-          <button type="submit" class="btnSubmit">Register</button></center>
+          <button type="submit" class="btnSubmit">Register</button></center><br>
           <div class="text-center">Already have an account? <a href="doctorlogin">Login here</a></div>
         </div>
       </div>

@@ -1121,28 +1121,31 @@
          <div class="profile-page" >
         <div class="content" >
     <div class="content__cover">
-      
+      <br><br><br><br><br><br><br><br>
       <div ><img class="content__avatar" src="{% static 'images/male.jpg' %}"></div>
       
       <div class="content__bull"><span></span><span></span><span></span><span></span><span></span>
       </div>
     </div>
     
-    <div class="content__actions"><a href="#">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="100 100 640 512">
-        </svg><span>Filter</span></a><a href="#">
-        </svg><span>Delete</span></a>
+    <div class="content__actions">
+        <br>
+        
+        
     </div>
+
     <div class="content__title">
       {% for item in data|slice:":1" %}
         <h1>{{ item.patient_name}}</h1>
       {% endfor %}
     </div>
+    <br><br>
     <ul class="content__list">
       <li><span>Male</span>Gender</li>
       <li><span>22</span>Age</li>
       <li><span><small><b>+91-9876543210</b></small></span>Contact</li>
     </ul>
+    <br>
     
     <!--  
        <div class="content__button"><a class="button" href="#">
@@ -1158,7 +1161,16 @@
   </div>
 </div>
 
-<div style="text-align: center; margin: 100px 0px 90px 0px; text-decoration:overline; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;"><h1><b>Records</b></h1></div>
+<div style="text-align: center; margin: 100px 0px 90px 0px; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+  <h1><b style="text-decoration:overline;">Records</b></h1><br><br>
+  {% for item in data|slice:":1" %}
+        {% if item.who == "doctor" %}
+        <a href="dataupload" >+ Add Records</a>
+        {% endif %}
+      {% endfor %}
+  
+</div>
+ 
 <!-- TimeLine  ---------------------------------------------- -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 <div class="container" style="background-color: #EFEFEF; border-radius: 50px;">
@@ -1182,14 +1194,17 @@
     <div class="timeline-icon">
       <a href="javascript:;">&nbsp;</a>
     </div>
-    <div class="timeline-body">
-      <div class="timeline-header">
+    <div class="timeline-body"  {% if item.hide == 1 %} style="background-color:#FFCCCB ;"{% endif %}>
+      
+      <div class="timeline-header" >
+        
         <span class="userimage"><img src="{% static 'images/male.jpg' %}" alt></span>
         <span class="username">{{item.doctor_name}} <small></small></span>
         <span class="pull-right text-muted" >{{item.isdoctor}}</span>
         <small class="text-muted" style="margin-left:45px; margin-top:0px">ID:{{item.doctor_id}}</small>
       </div>
       <small class="text-muted">
+        <br>
         Title: {{item.title}}<br>
         Category: {{item.category}}
       </small>
@@ -1199,21 +1214,22 @@
           <div class="flt">
             {% for link1 in item.link %}
               <div class="pdfview">
-              <embed src="{% static 'pdfs/' %}{{link1.file_name }}#toolbar=0" width="250px" height="250px">
+                
+              <embed src="{% static 'pdfs/' %}{{link1.file_name }}" width="250px" height="250px">
               <a href="{% static 'pdfs/' %}{{link1.file_name }}">{{link1.file_name}}</a>
               </div>
             {% endfor %}
-            <!-- <div class="pdfview">
-              <embed src="F:\Visual_Studio\MajorProject\hospitalmanagement-master\PDFS\School of Nursing Health Incident Report Form.pdf#toolbar=0" width="250px" height="250px">
-              <a href="F:\Visual_Studio\MajorProject\hospitalmanagement-master\PDFS\School of Nursing Health Incident Report Form.pdf">School of Nursing Health Incident Report Form.pdf</a>
-              </div>
-              <div class="pdfview">
-                <embed src="F:\Visual_Studio\MajorProject\hospitalmanagement-master\PDFS\University HEalth Report.pdf#toolbar=0" width="250px" height="250px">
-                <a href="F:\Visual_Studio\MajorProject\hospitalmanagement-master\PDFS\University HEalth Report.pdf">University HEalth Report.pdf</a>
-                </div>   -->
             
           </div>
         </pre>
+        {% if item.who == "patient" %}
+        {% if item.hide == 0 %}
+        <a href="profile_page">Hide</a>
+        {% else %}
+        <a href="profile_page">Un-Hide</a>
+        {% endif %}
+        {% endif %}
+        
     </p>
   </div>
 </li>

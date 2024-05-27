@@ -47,6 +47,11 @@
       background: #0062cc;
       color: #fff;
     }
+    input{
+      border-radius:5px;
+      padding:5px;
+      width:350px;
+    }
   </style>
 
 </head>
@@ -71,21 +76,23 @@
             <div class="col-md-6">
 
               <div class="form-group">
-                {% render_field form.username class="form-control" placeholder="Phone Number" %}
+                <input  type="text" name="phone number" placeholder="Phone Number">
+                
               </div>
 
             </div>
             <div class="col-md-6">
 
-              <div class="form-group">
-                {% render_field form.password class="form-control" placeholder="OTP" %}
+              <div class="form-group" style="float:right;">
+                <input type="text" name="OTP" placeholder="OTP">
+                
               </div>
 
             </div>
           </div>
-          <button type="submit" class="btnSubmit">Login</button>
-
-          <div class="text-center">Do not have account? <a href="patientsignup">Signup here</a></div>
+          <button type="submit" class="btnSubmit">Send OTP</button>
+          <button style="float:right;" type="submit" class="btnSubmit">Submit</button>
+          
         </div>
       </div>
     </div>

@@ -1,9 +1,5 @@
 {% extends 'hospital/homebase.html' %}
 {% load static %}
-<!--
-written By : sumit kumar
-facebook : fb.com/sumit.luv
--->
 
 
 {% block content %}
@@ -56,21 +52,9 @@ facebook : fb.com/sumit.luv
 
 <div class="jumbotron" style="margin-bottom: 0px;margin-top: 0px;">
   <br>
-  <h5 class="display-3">ELECTRONIC HEALTH CARD</h5>
+  <h5 class="display-3" style="font-weight:bold; color:white;">ELECTRONIC HEALTH CARD</h5>
   <br><br><br><br><br>
-  <p>
-  <h3>Know More</h3>
-
-  <p class="lead">
-    <a class="btn btn-primary btn-lg" href="/patientclick" role="button">Know More</a>
-  </p>
-  <br><br>
+  {% include "hospital/admin_doctor_patient_card.html" %}
 </div>
-
-<br><br><br><br>
-
-{% include "hospital/admin_doctor_patient_card.html" %}
-<br><br><br>
-
 
 {% endblock content %}

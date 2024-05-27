@@ -8,9 +8,10 @@
     .card {
       box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
       max-width: 300px;
-      margin: auto;
       text-align: center;
       font-family: arial;
+      margin:50px;
+      padding:20px;
     }
 
     .title {
@@ -20,6 +21,7 @@
 
     button {
       border: none;
+      border-radius: 30px;
       outline: 0;
       display: inline-block;
       padding: 8px;
@@ -56,20 +58,12 @@
 
 
 
-  <div class="grid-container">
-    <div class="grid-item">
-      <div class="card">
-        <img src="{% static "images/admin.png" %}" alt="John" style="width:100%">
-        <p class="title">ADMIN</p>
-        <p><button><a href="/adminclick">View</a></button></p>
-      </div>
-
-    </div>
+  <div style="display:flex; justify-content:left; ">
 
     <div class="grid-item">
       <div class="card">
         <img src="{% static "images/doctor.png" %}" alt="John" style="width:100%">
-        <p class="title">DOCTOR</p>
+        <p class="title"><b>DOCTOR</b></p>
         <p><button><a href="/doctorclick">View</a></button></p>
       </div>
     </div>
@@ -77,18 +71,12 @@
     <div class="grid-item">
       <div class="card">
         <img src="{% static "images/patient.jpg" %}" alt="John" style="width:100%">
-        <p class="title">PATIENT</p>
+        <p class="title"><b>PATIENT</b></p>
         <p><button><a href="/patientclick">View</a></button></p>
       </div>
     </div>
 
   </div>
-  <!--
-  developed By : sumit kumar
-  facebook : fb.com/sumit.luv
-  youtube : youtube.com/lazycoders
-  -->
-
 </body>
 
 </html>

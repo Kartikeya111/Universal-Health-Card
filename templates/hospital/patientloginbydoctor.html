@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Doctor Login</title>
+  <title>Patient Login</title>
 
 
   <style type="text/css">
@@ -13,11 +13,6 @@
       color: #aa082e;
       background-color: #b6bde7;
       font-family: 'Roboto', sans-serif;
-    }
-    input{
-      border-radius:5px;
-      padding:5px;
-      width:400px;
     }
 
     a:link {
@@ -51,7 +46,11 @@
       cursor: pointer;
       background: #0062cc;
       color: #fff;
-      
+    }
+    input{
+      border-radius:5px;
+      padding:5px;
+      width:350px;
     }
   </style>
 
@@ -60,16 +59,16 @@
 <body>
   {% include "hospital/navbar.html" %}
   <br>
-  <br><br><br>
-  <br><br><br><br>
+  <br>
+  <br><br>
 
-  <!--- login page for doctor by admin(sumit)  ---------->
+  <!--- login page for patient by admin(sumit)  ---------->
   <form method="post">
     {% csrf_token %}
     <div class="container register-form">
       <div class="form">
         <div class="note">
-          <p>Doctor Login Page</p>
+          <p>View Patient's Profile</p>
         </div>
 
         <div class="form-content">
@@ -77,34 +76,30 @@
             <div class="col-md-6">
 
               <div class="form-group">
-                <input type="text" placeholder="Username" name="username" required>
-  
+                <input  type="text" name="phone number" placeholder="Phone Number">
+                
               </div>
 
             </div>
             <div class="col-md-6">
 
-              <div class="form-group">
-                <input type="password" placeholder="Password" name="password" required>
-
+              <div class="form-group" style="float:right;">
+                <input type="text" name="OTP" placeholder="OTP">
+                
               </div>
 
             </div>
           </div>
-          <br>
-          <center>
-          <button type="submit" class="btnSubmit">Login</button>
-          </center>
-          <br>
-          <div class="text-center">Do not have account? <a href="doctorsignup">Signup here</a></div>
+          <button type="submit" class="btnSubmit">Send OTP</button>
+          <button style="float:right;" type="submit" class="btnSubmit">Submit</button>
+          
         </div>
       </div>
     </div>
 
   </form>
 
-  <br><br><br><br><br><br>
-
+  <br><br><br>
   {% include "hospital/footer.html" %}
 </body>
 
