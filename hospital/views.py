@@ -38,6 +38,8 @@ def patientclick_view(request):
     return render(request,'hospital/patientclick.html')
 
 
+
+
 def admin_signup_view(request):
     form=forms.AdminSigupForm()
     if request.method=='POST':
@@ -110,10 +112,8 @@ def is_patient(user):
 
 #---------AFTER ENTERING CREDENTIALS WE CHECK WHETHER USERNAME AND PASSWORD IS OF ADMIN,DOCTOR OR PATIENT
 def afterlogin_view(request):
-    
     if is_admin(request.user):
         return redirect('admin-dashboard')
-    
     elif is_doctor(request.user):
         accountapproval=models.Doctor.objects.all().filter(user_id=request.user.id,status=True)
         if accountapproval:
@@ -128,72 +128,9 @@ def afterlogin_view(request):
             return render(request,'hospital/patient_wait_for_approval.html')
 
 
-#####
-#####
-#  ADDED FUNCTIONS #
-#Doctor View Patient Profile
-def doc_view_profile(request):
-    df= pd.read_excel("csv Files/Patient Data.xlsx")
-    user_id="abc123"
-    df2 = df[(df["Username"]==user_id) & (df["hide"]==0)]
-    df2 = df2.sort_values(by="date",ascending=False)
-    con = {"data":[]}
-    for row in df2.iloc[:,:].values:
-        context = {}
-        context["patient_name"]=row[1]
-        context["doctor_name"]=row[2]
-        context["doctor_id"]=row[3]
-        context["title"]=row[4]
-        context["category"]=row[5]
-        if(row[6].lower()=="yes"):
-            context["isdoctor"]="Doctor"
-        else:
-            context["isdoctor"]="Hospital"
-        context["link"]=[]
-        for link in row[7].split(','):
-            temp={}
-            temp["sublink"]=link
-            temp["file_name"]=link.split("\\")[-1]
-            context["link"].append(temp)
-        full_date=str(row[8])
-        full_date=full_date.split(" ")
-        context["date"]=full_date[0]
-        context["time"]=full_date[1]
-        con["data"].append(context)
-    con
-    return render(request,"hospital/profile.html",con)
 
-# For Showing patient's Profile page
-def profile_page(request):
-    df= pd.read_excel("csv Files/Patient Data.xlsx")
-    user_id="abc123"
-    df2 = df[df["Username"]==user_id]
-    df2 = df2.sort_values(by="date",ascending=False)
-    con = {"data":[]}
-    for row in df2.iloc[:,:].values:
-        context = {}
-        context["patient_name"]=row[1]
-        context["doctor_name"]=row[2]
-        context["doctor_id"]=row[3]
-        context["title"]=row[4]
-        context["category"]=row[5]
-        if(row[6].lower()=="yes"):
-            context["isdoctor"]="Doctor"
-        else:
-            context["isdoctor"]="Hospital"
-        context["link"]=[]
-        for link in row[7].split(','):
-            temp={}
-            temp["sublink"]=link
-            temp["file_name"]=link.split("\\")[-1]
-            context["link"].append(temp)
-        full_date=str(row[8])
-        full_date=full_date.split(" ")
-        context["date"]=full_date[0]
-        context["time"]=full_date[1]
-        con["data"].append(context)
-    con
-    return render(request,"hospital/profile.html",con)
+
+
 
 
 
@@ -630,26 +567,27 @@ def reject_appointment_view(request,pk):
 @login_required(login_url='doctorlogin')
 @user_passes_test(is_doctor)
 def doctor_dashboard_view(request):
-    #for three cards
-    patientcount=models.Patient.objects.all().filter(status=True,assignedDoctorId=request.user.id).count()
-    appointmentcount=models.Appointment.objects.all().filter(status=True,doctorId=request.user.id).count()
-    patientdischarged=models.PatientDischargeDetails.objects.all().distinct().filter(assignedDoctorName=request.user.first_name).count()
+    # #for three cards
+    # patientcount=models.Patient.objects.all().filter(status=True,assignedDoctorId=request.user.id).count()
+    # appointmentcount=models.Appointment.objects.all().filter(status=True,doctorId=request.user.id).count()
+    # patientdischarged=models.PatientDischargeDetails.objects.all().distinct().filter(assignedDoctorName=request.user.first_name).count()
 
-    #for  table in doctor dashboard
-    appointments=models.Appointment.objects.all().filter(status=True,doctorId=request.user.id).order_by('-id')
-    patientid=[]
-    for a in appointments:
-        patientid.append(a.patientId)
-    patients=models.Patient.objects.all().filter(status=True,user_id__in=patientid).order_by('-id')
-    appointments=zip(appointments,patients)
-    mydict={
-    'patientcount':patientcount,
-    'appointmentcount':appointmentcount,
-    'patientdischarged':patientdischarged,
-    'appointments':appointments,
-    'doctor':models.Doctor.objects.get(user_id=request.user.id), #for profile picture of doctor in sidebar
-    }
-    return render(request,'hospital/doctor_dashboard.html',context=mydict)
+    # #for  table in doctor dashboard
+    # appointments=models.Appointment.objects.all().filter(status=True,doctorId=request.user.id).order_by('-id')
+    # patientid=[]
+    # for a in appointments:
+    #     patientid.append(a.patientId)
+    # patients=models.Patient.objects.all().filter(status=True,user_id__in=patientid).order_by('-id')
+    # appointments=zip(appointments,patients)
+    # mydict={
+    # 'patientcount':patientcount,
+    # 'appointmentcount':appointmentcount,
+    # 'patientdischarged':patientdischarged,
+    # 'appointments':appointments,
+    # 'doctor':models.Doctor.objects.get(user_id=request.user.id), #for profile picture of doctor in sidebar
+    # }
+    # return render(request,'hospital/doctor_dashboard.html',context=mydict)
+    return redirect('doctor-patient')
 
 
 
@@ -760,18 +698,56 @@ def delete_appointment_view(request,pk):
 @login_required(login_url='patientlogin')
 @user_passes_test(is_patient)
 def patient_dashboard_view(request):
+
+
     patient=models.Patient.objects.get(user_id=request.user.id)
     doctor=models.Doctor.objects.get(user_id=patient.assignedDoctorId)
     mydict={
-    'patient':patient,
-    'doctorName':doctor.get_name,
-    'doctorMobile':doctor.mobile,
-    'doctorAddress':doctor.address,
-    'symptoms':patient.symptoms,
-    'doctorDepartment':doctor.department,
-    'admitDate':patient.admitDate,
+    'patient_name':patient,
+    'doctor_name':doctor.get_name,
+    'doctor_id':str(patient.get_dr_id),
+    'patient_age':str(patient.get_age),
+    'patient_mobile':str(patient.get_mobile),
+    # 'doctorAddress':doctor.address,
+    'title':patient.symptoms,
+    # 'doctorDepartment':doctor.department,
+    # 'admitDate':patient.admitDate,
     }
-    return render(request,'hospital/patient_dashboard.html',context=mydict)
+
+    df= pd.read_excel("csv Files/Patient Data.xlsx")
+    user_id="abc123"
+    df2 = df[df["Username"]==user_id]
+    df2 = df2.sort_values(by="date",ascending=False)
+    con = {"data":[]}
+    for row in df2.iloc[:,:].values:
+        # context["patient_name"]=row[1]
+        # context["doctor_name"]=row[2]
+        # context["doctor_id"]=row[3]
+        # context["title"]=row[4]
+        mydict["category"]=row[5]
+        if(row[6].lower()=="yes"):
+            mydict["isdoctor"]="Doctor"
+        else:
+            mydict["isdoctor"]="Hospital"
+        mydict["link"]=[]
+        for link in row[7].split(','):
+            temp={}
+            temp["sublink"]=link
+            temp["file_name"]=link.split("\\")[-1]
+            mydict["link"].append(temp)
+        full_date=str(row[8])
+        full_date=full_date.split(" ")
+        mydict["date"]=full_date[0]
+        mydict["time"]=full_date[1]
+        mydict["hide"]=int(row[9])
+        mydict["who"]="patient"
+        con["data"].append(mydict)
+    con
+    return render(request,"hospital/patient_dashboard.html",con)
+
+
+    
+    # return render(request,'hospital/patient_dashboard.html',context=mydict)
 
 
 
@@ -904,4 +880,6 @@ def contactus_view(request):
 #---------------------------------------------------------------------------------
 #------------------------ ADMIN RELATED VIEWS END ------------------------------
 #---------------------------------------------------------------------------------
+
+
 
